@@ -1,9 +1,10 @@
-import {CartType, DELETE_CART, UPDATE_CART} from "../../graphql/cart";
+import { CartType, DELETE_CART, UPDATE_CART } from "../../graphql/cart";
 import { getClient, graphqlFetcher, QueryKeys } from "../../queryClient";
 import { useMutation } from "react-query";
-import { SyntheticEvent } from "react";
+import { ForwardedRef, forwardRef, SyntheticEvent } from "react";
 
-const CartItem = ({ id, imageUrl, price, title, amount }: CartType) => {
+const CartItem = ({ id, imageUrl, price, title, amount }: CartType,
+                  ref: ForwardedRef<HTMLInputElement>) => {
     const queryClient = getClient()
     const { mutate: updateCart } = useMutation(
         ({id, amount }: {id: string, amount: number}) => graphqlFetcher(UPDATE_CART, { id, amount }),
@@ -43,6 +44,7 @@ const CartItem = ({ id, imageUrl, price, title, amount }: CartType) => {
 
     const handleUpdateAmount = (e: SyntheticEvent) => {
         const amount = Number((e.target as HTMLInputElement).value)
+        if (amount < 1) return
         updateCart({ id, amount})
       }
 
@@ -52,13 +54,17 @@ const CartItem = ({ id, imageUrl, price, title, amount }: CartType) => {
 
     return (
         <li className="cart-item">
-            <input type="checkbox" />
-            <img src={imageUrl} />
+            <input className="cart-item__checkbox" name="select-item" type="checkbox" ref={ref}/>
+            <img className="cart-item__image" src={imageUrl} />
             <p className="cart-item__price">{price}</p>
             <p className="cart-item__title">{title}</p>
-            <input type="number" className="cart-item__amount" value={amount} onChange={handleUpdateAmount}/>
+            <input type="number"
+                   className="cart-item__amount"
+                   value={amount}
+                   min={1}
+                   onChange={handleUpdateAmount}/>
             <button className="cart-item__delete" type="button" onClick={handleDeleteItem}>삭제</button>
         </li>
     )
 }
-export default CartItem
+export default forwardRef(CartItem)
