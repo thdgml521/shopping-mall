@@ -53,17 +53,18 @@ const CartItem = ({ id, imageUrl, price, title, amount }: CartType,
       deleteCart({ id })
     }
 
-    return (
-        <li className="cart-item">
-          <input className="cart-item__checkbox" type="checkbox" name="select-item" ref={ref} data-id={id}/>
-          <ItemData imageUrl={imageUrl} price={price} title={title}/>
-          <input type="number"
-                 className="cart-item__amount"
-                 value={amount}
-                 min={1}
-                 onChange={handleUpdateAmount}/>
-          <button className="cart-item__delete" type="button" onClick={handleDeleteItem}>삭제</button>
-        </li>
-    )
+  return (<li className="cart-item">
+    <input className="cart-item__checkbox" type="checkbox" name="select-item" ref={ref} data-id={id}/>
+    <ItemData imageUrl={imageUrl} price={price} title={title}/>
+    <input
+        className="cart-item__amount"
+        type="number"
+        value={amount}
+        min={1}
+        onChange={handleUpdateAmount}/>
+    <button className="cart-item__button" type="button" onClick={handleDeleteItem}>
+      삭제
+    </button>
+  </li>)
 }
 export default forwardRef(CartItem)

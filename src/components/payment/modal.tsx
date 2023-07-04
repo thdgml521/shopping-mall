@@ -7,10 +7,15 @@ const ModalPortal = ({children}: { children: ReactChild }) => {
 const PaymentModal = ({show, proceed, cancel}: { show: boolean; proceed: () => void; cancel: () => void }) => {
   return show ? (
       <ModalPortal>
-        <div><p>정말 결제 할까요?</p><div>
-          <button onClick={proceed}>예</button>
-          <button onClick={cancel}>아니요</button>
-        </div></div>
+        <div className={`modal ${show ? 'show' : ''}`}>
+          <div className="modal__inner">
+            <p>정말 결제 할까요?</p>
+            <div>
+              <button onClick={proceed}>예</button>
+              <button onClick={cancel}>아니요</button>
+            </div>
+          </div>
+        </div>
       </ModalPortal>
   ) : null;
 }
